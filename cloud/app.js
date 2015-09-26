@@ -1,6 +1,12 @@
 // These two lines are required to initialize Express in Cloud Code.
 express = require('express');
 var _ = require('underscore');
+var moment = require('moment');
+var config = require('cloud/config.js');
+var Mailgun = require('mailgun');
+
+Mailgun.initialize(config.mailgun.domain, config.mailgun.api);
+
 app = express();
 
 // Global app configuration section
@@ -79,6 +85,82 @@ app.get('/api/areas', function (req, res) {
             res.send(200, values);
         },
         error: function (error) {
+            res.send(500, 'error');
+        }
+    });
+});
+
+app.get('/api/content', function (req, res) {
+    if(_.isUndefined(req.query.area) || req.query.area === ''){
+        res.send(400, 'error');
+    }else{
+        var id;
+        switch (req.query.area) {
+            case 'aboutUs':
+                id = '3Z1EowfgjM';
+                break;
+            default:
+                id = '';
+        }
+        var Content = Parse.Object.extend("Content");
+        var query = new Parse.Query(Content);
+        query.get(id, {
+            success: function (result) {
+                var values = result.get('htmlBody');
+                res.send(200, values);
+            },
+            error: function (error) {
+                res.send(500, 'error');
+            }
+        });
+    }
+});
+
+app.get('/api/staff', function (req, res) {
+    var Staff = Parse.Object.extend("Staff");
+    var query = new Parse.Query(Staff);
+    query.find({
+        success: function (results) {
+            var values = _.chain(results)
+                .map(function (element) {
+                    return {
+                        name: element.get('name'),
+                        position: element.get('position'),
+                        area: element.get('area'),
+                        order: element.get('order')
+                    };
+                })
+                .value();
+            res.send(200, values);
+        },
+        error: function (error) {
+            res.send(500, 'error');
+        }
+    });
+});
+
+app.post('/api/email', function(req, res){
+
+    var body = 'Se ha realizado una peticion de informacion.\r\n' +
+                'Contacto:\r\n' +
+                'Nombre: ' + req.body.name + '\r\n' +
+                'Numero Telefonico: '+ req.body.phone+'\r\n' +
+                'Email: ' + (req.body.email || 'vacio') + '\r\n' +
+                'Comentario: ' + req.body.comment + '\r\n\r\n\r\n' +
+                'Fecha: '+ moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
+
+    Mailgun.sendEmail({
+        to: config.mailgun.to,
+        from: config.mailgun.from,
+        subject: 'Peticion de Informacion',
+        text: body
+    }, {
+        success: function(httpResponse) {
+            res.send(200, true);
+
+        },
+        error: function(httpResponse) {
+            console.log(httpResponse);
             res.send(500, 'error');
         }
     });
