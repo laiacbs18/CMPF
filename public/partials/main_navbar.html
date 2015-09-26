@@ -1,0 +1,43 @@
+﻿
+<div class="navbar navbar-default-custom navbar-fixed-top ng-cloak" ng-controller="NavigationBarCtrl as navigation" ng-cloak>
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#!/" class="navbar-brand">CM Padre Fantino</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li ng-class="{'active': navigation.isActive('/')}">
+                    <a href="#!/">Inicio</a>
+                </li>
+                <li ng-class='{"active": navigation.isActive(["/acercaDeNosotros", "/marcoFilosofico", "/equipoGerencial", "/descripcion"])}' class="dropdown">
+                    <a href="" class="dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Acerca de nosotros</a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li>
+                            <a href="#!/acercaDeNosotros">Quiénes Somos</a>
+                        </li>
+                        <li>
+                            <a href="#!/marcoFilosofico">Marco Filosófico</a>
+                        </li>
+                        <li>
+                            <a href="#!/equipoGerencial">Equipo Gerencial</a>
+                        </li>
+                        <li>
+                            <a href="#!/descripcion">Descripción</a>
+                        </li>
+                    </ul>
+                </li>
+                <li ng-class="{'active': navigation.isActive('/noticiasyactividades')}">
+                    <a href="#!/noticiasyactividades">Noticias y Actividades</a>
+                </li>
+                <li ng-class="{'active': navigation.isActive('/contacto')}">
+                    <a href="#!/contacto">Contacto</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

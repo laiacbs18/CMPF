@@ -1,0 +1,16 @@
+﻿<div class="adminLogIn col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4 ng-cloak" ng-show="adminLogin.done">
+    <form class="form-signin" novalidate="">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <div class="form-group">
+            <label for="inputEmail">Nombre de Usuario</label>
+            <input type="text" id="inputEmail" class="form-control" placeholder="Usuario" required="" ng-model="adminLogin.user.username">
+        </div>
+        <div class="form-group">
+            <label for="inputPassword">Contraseña</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña" required="" ng-model="adminLogin.user.password">
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg btn-primary btn-block" ng-click="adminLogin.submit()">Iniciar sesión</button>
+        </div>
+    </form>
+</div>  

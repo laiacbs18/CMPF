@@ -1,0 +1,14 @@
+﻿<div id="equipoGrl" class="col-xs-12">
+    <div class="row">
+        <h1>Equipo Gerencial</h1>
+    </div>
+    <div class="row">
+        <div ng-repeat="person in management.team | orderBy:'order'" class="col-xs-12 col-sm-6 col-md-4 person">
+            <p><strong>{{person.name}}</strong></p>
+            <div class="positions">
+                <p><em>{{person.position}}</em></p>
+                <p><em>{{person.area}}</em></p>
+            </div>
+        </div>
+    </div>
+</div>

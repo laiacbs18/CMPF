@@ -1,0 +1,36 @@
+﻿<div class="col-xs-12" id="map-canvas">
+
+</div>
+<div class="col-xs-12 col-sm-4">
+    <h2>Contáctenos</h2>
+    <h4>Centro Médico Padre Fantino SRL</h4>
+    <p>
+        <strong>Dirección:</strong> Calle Gral. Juan Rodríguez #83, La Vega, República Dominicana
+    </p>
+    <p>
+        <strong>Teléfono:</strong> 809-573-2533
+    </p>
+    <p>
+        <strong>E-mail:</strong> drafrieda@gmail.com
+    </p>
+</div>
+<div class="col-xs-12 col-sm-8" style="padding-top: 20px">
+    <p><strong>Para comunicarse con nosotros por favor rellene el siguiente formulario, o utilice los siguientes datos de contactos: </strong></p>
+    <form class="row" name="contact.formValidator" novalidate>
+        <div class="form-group col-xs-12 col-sm-4" ng-class="{'has-error': contact.formValidator.name.$invalid && contact.formValidator.$submitted}">
+            <input type="text" class="form-control" name="name" placeholder="Nombre:" ng-model="contact.form.name" required>
+        </div>
+        <div class="form-group col-xs-12 col-sm-4" ng-class="{'has-error': contact.formValidator.phoneNumber.$invalid && contact.formValidator.$submitted}">
+            <input type="tel" class="form-control" name="phoneNumber" placeholder="Número Telefónico:" ng-model="contact.form.phone" required>
+        </div>
+        <div class="form-group col-xs-12 col-sm-4" ng-class="{'has-error': contact.formValidator.email.$invalid && contact.formValidator.$submitted}">
+            <input type="email" class="form-control" name="email" placeholder="E-mail:" ng-model="contact.form.email">
+        </div>
+        <div class="form-group col-xs-12" ng-class="{'has-error': contact.formValidator.comment.$invalid && contact.formValidator.$submitted}">
+            <textarea class="form-control" rows="3" name="comment" placeholder="Su comentario aqui:" ng-model="contact.form.comment" required></textarea>
+        </div>
+        <div class="form-group col-xs-12">
+            <button type="submit" class="btn btn-primary" ng-click="contact.submitForm()">Submit</button>
+        </div>
+    </form>
+</div>

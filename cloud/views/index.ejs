@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html ng-app="CMPF">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width"/>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <title>Centro Médico Padre Fantino</title>
+  <link href="styles/bootstrap.css" rel="stylesheet">
+  <link href="styles/font-awesome.css" rel="stylesheet">
+  <link href="styles/metisMenu.css" rel="stylesheet">
+  <link href="styles/site.css" rel="stylesheet">
+  <link href="styles/textAngular.css" rel="stylesheet">
+  <script src="scripts/es5-shim.js"></script>
+</head>
+<body class="ng-cloak" ng-class="{'login': app.isLogin(),'admin': app.isAdmin()}" ng-controller="GlobalCtrl as app" ng-cloak>
+<div ng-include="'partials/main_navbar.html'" ng-if="!app.isAdmin()" ></div>
+<div ng-include="'partials/admin_navbar.html'" ng-if="app.isAdmin() && !app.isLogin()"></div>
+<div class="body-content" ng-class="{'admin-body': app.isAdmin() && !app.isLogin(), 'container': !app.isAdmin() || app.isLogin()}">
+  <div ng-view="" class="row" style="padding-top: 20px" autoscroll ="true"></div>
+</div>
+<div class=" footer-container ng-cloak" ng-hide="app.isAdmin()" ng-cloak>
+  <div class="container">
+    <footer>
+      <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-3">
+          <h4>Síguenos</h4>
+          <button type="button" class="btn btn-primary">Facebook</button>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-6">
+          <div class="row">
+            <div class="col-xs-12">
+              <h4>Secciones</h4>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-md-4 text-center">
+              <a href="#!/servicios">Servicios</a>
+            </div>
+            <div class="col-xs-12 col-md-4 text-center">
+              <a href="#!/especialidades">Especialidades</a>
+            </div>
+            <div class="col-xs-12 col-md-4 text-center">
+              <a href="#!/areas">Áreas</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-3">
+          <h4>Comparte</h4>
+        </div>
+      </div>
+      <div class="text-center row">
+        <a onclick="document.body.scrollTop = 0" style="cursor: pointer">
+          <strong>Volver arriba</strong>
+        </a>
+      </div>
+      <div class="row" style="margin-top: 8px">
+        <p class="muted credit pull-left">&copy; @DateTime.Now.Year - Centro Médico Padre Fantino S.R.L.</p>
+        <p class="muted credit pull-right">
+          Diseñado por: <a href="https://www.facebook.com/laia.bordas18">Laia Bordas</a>
+        </p>
+      </div>
+
+
+    </footer>
+  </div>
+</div>
+<script type="text/javascript" src="scripts/jquery-2.1.4.js"></script>
+
+<script type="text/javascript" src="scripts/angular.js"></script>
+<script type="text/javascript" src="scripts/angular-route.js"></script>
+
+<script type="text/javascript" src="scripts/bootstrap.js"></script>
+<script type="text/javascript" src="scripts/respond.js"></script>
+
+<script type="text/javascript" src="scripts/metisMenu.js"></script>
+
+<script type="text/javascript" src="scripts/angular-file-upload.min.js"></script>
+
+<script type="text/javascript" src="scripts/textAngular/textAngular-rangy.min.js"></script>
+<script type="text/javascript" src="scripts/textAngular/textAngular-sanitize.js"></script>
+<script type="text/javascript" src="scripts/textAngular/textAngularSetup.js"></script>
+<script type="text/javascript" src="scripts/textAngular/textAngular.js"></script>
+
+<script type="text/javascript" src="scripts/app.js"></script>
+
+<script type="text/javascript" src="scripts/controllers/aboutCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/adminDashboardCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/adminLoginCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/adminServicesCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/adminSpecialtiesCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/equipoGrlCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/navigationBarCtrl.js"></script>
+<script type="text/javascript" src="scripts/controllers/servicesCtrl.js"></script>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+</body>
+</html>
