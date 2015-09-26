@@ -5,6 +5,9 @@
             domain: '',
             from: '',
             to: ''
+        },
+        cookie: {
+            secret: ''
         }
     };
 })();
