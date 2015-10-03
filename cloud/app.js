@@ -4,15 +4,57 @@ var _ = require('underscore');
 var moment = require('moment');
 var config = require('cloud/config.js');
 var Mailgun = require('mailgun');
-
+var parseExpressHttpsRedirect = require('parse-express-https-redirect');
+var parseExpressCookieSession = require('parse-express-cookie-session');
+var adminServices = require('cloud/routes/admin/services.js');
+var adminSpecialties = require('cloud/routes/admin/specialties.js')
 Mailgun.initialize(config.mailgun.domain, config.mailgun.api);
 
 app = express();
-
 // Global app configuration section
 app.set('views', 'cloud/views');  // Specify the folder to find templates
 app.set('view engine', 'ejs');    // Set the template engine
+app.use(parseExpressHttpsRedirect());
 app.use(express.bodyParser());    // Middleware for reading request body
+app.use(express.cookieParser(config.cookie.secret));
+app.use(parseExpressCookieSession());
+
+app.get('/api/admin', function (req, res){
+    var currentUser = Parse.User.current();
+    if (currentUser) {
+        currentUser.fetch().then(function(user){
+            res.send(200, user);
+        }).fail(function(){
+            res.send(401,{});
+        });
+    } else {
+        res.send(401,{});
+    }
+});
+
+app.post('/api/admin', function (req, res){
+    Parse.User.logIn(req.body.username, req.body.password).then(function(user) {
+            res.send(200, user);
+        }, function(user, error) {
+            res.send(401,{});
+        });
+});
+
+app.get('/api/admin/logout', function (req, res){
+    Parse.User.logOut();
+    res.send(200, {});
+});
+
+app.get('/api/admin/services', adminServices.get);
+app.delete('/api/admin/services/:service_id', adminServices.delete);
+app.put('/api/admin/services', adminServices.put);
+app.post('/api/admin/services', adminServices.post);
+
+
+app.get('/api/admin/specialties', adminSpecialties.get);
+app.delete('/api/admin/specialties/:specialty_id', adminSpecialties.delete);
+app.put('/api/admin/specialties', adminSpecialties.put);
+app.post('/api/admin/specialties', adminSpecialties.post);
 
 
 app.get('/api/services', function (req, res) {

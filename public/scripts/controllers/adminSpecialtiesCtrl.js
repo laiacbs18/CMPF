@@ -3,14 +3,14 @@
 app.controller('AdminSpecialtiesCtrl', [
     '$http', function($http) {
         var controller = this;
-        $http.get('/api/specialtiesadmin').then(function(response) {
+        $http.get('/api/admin/specialties').then(function(response) {
             controller.specialties = response.data;
         }, function(error) {});
 
         controller.delete = function(specialty) {
             var response = confirm('Seguro que desea borrar "' + specialty.name + '"?');
             if (response) {
-                $http.delete('/api/specialtiesadmin/' + specialty.id).then(function(response) {
+                $http.delete('/api/admin/specialties/' + specialty.id).then(function(response) {
                     var index = controller.specialties.indexOf(specialty);
                     controller.specialties.splice(index, 1);
                 }, function(error) {});
@@ -45,7 +45,7 @@ app.controller('AdminSpecialtiesCtrl', [
 
         controller.save = function() {
             if (controller.reference != null) {
-                $http.put('/api/specialtiesadmin', controller.selectedSpecialty).then(function(response) {
+                $http.put('/api/admin/specialties', controller.selectedSpecialty).then(function(response) {
                     var index = controller.specialties.indexOf(controller.reference);
                     controller.specialties.splice(index, 1);
                     controller.specialties.push(angular.copy(controller.selectedSpecialty));
@@ -55,7 +55,7 @@ app.controller('AdminSpecialtiesCtrl', [
                     $('.specialty-modal').modal('toggle');
                 }, function(error) {});
             } else {
-                $http.post('/api/specialtiesadmin', controller.selectedSpecialty).then(function(response) {
+                $http.post('/api/admin/specialties', controller.selectedSpecialty).then(function(response) {
                     var savedSpecialty = response.data;
                     controller.specialties.push(savedSpecialty);
                     controller.reference = null;

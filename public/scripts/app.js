@@ -208,28 +208,27 @@
     }]);
 
     app.service("userService", ['$http', function ($http) {
-        var sessionToken;
-
-        this.setCurrentUser = function (token) {
-            sessionToken = token;
-        }
-
         this.getCurrentUser = function() {
-            return $http.get('/api/admin', { headers: { "X-Session-Token": sessionToken } }).then(function (response) {
+            return $http.get('/api/admin').then(function (response) {
                 return response.data;
             });
         }
     }]);
 
     
-    app.controller('GlobalCtrl', ['$location', function ($location) {
+    app.controller('GlobalCtrl', ['$location', '$http', function ($location, $http) {
         this.isAdmin = function () {
             return $location.path().indexOf('/admin') === 0;
-        }
+        };
 
         this.isLogin = function () {
             return $location.path().indexOf('/admin-login') === 0;
-        }
+        };
+        this.logout = function () {
+            $http.get('/api/admin/logout').finally(function(){
+                $location.path('/');
+            });
+        };
     }]);
 
 

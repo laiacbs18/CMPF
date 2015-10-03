@@ -3,14 +3,14 @@
 app.controller('AdminServicesCtrl', [
     '$http', function($http) {
         var controller = this;
-        $http.get('/api/servicesadmin').then(function(response) {
+        $http.get('/api/admin/services').then(function(response) {
             controller.services = response.data;
         }, function(error) {});
 
         controller.delete = function(service) {
             var response = confirm('Seguro que desea borrar "' + service.type + '"?');
             if (response) {
-                $http.delete('/api/servicesadmin/' + service.id).then(function(response) {
+                $http.delete('/api/admin/services/' + service.id).then(function(response) {
                     var index = controller.services.indexOf(service);
                     controller.services.splice(index, 1);
                 }, function(error) {});
@@ -43,7 +43,7 @@ app.controller('AdminServicesCtrl', [
 
         controller.save = function() {
             if (controller.reference != null) {
-                $http.put('/api/servicesadmin', controller.selectedService).then(function(response) {
+                $http.put('/api/admin/services', controller.selectedService).then(function(response) {
                     var index = controller.services.indexOf(controller.reference);
                     controller.services.splice(index, 1);
                     controller.services.push(angular.copy(controller.selectedService));
@@ -53,7 +53,7 @@ app.controller('AdminServicesCtrl', [
                     $('.service-modal').modal('toggle');
                 }, function(error) {});
             } else {
-                $http.post('/api/servicesadmin', controller.selectedService).then(function(response) {
+                $http.post('/api/admin/services', controller.selectedService).then(function(response) {
                     var savedService = response.data;
                     controller.services.push(savedService);
                     controller.reference = null;

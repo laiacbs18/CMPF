@@ -63,8 +63,8 @@
                     <a href="#"><i class="glyphicon glyphicon-cog"></i> Settings</a>
                 </li>
                 <li class="divider"></li>
-                <li>
-                    <a href="login.html"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
+                <li ng-controller="GlobalCtrl as global">
+                    <a href="#" ng-click="global.logout()"><i class="glyphicon glyphicon-log-out"></i> Logout</a>
                 </li>
             </ul>
         </li>

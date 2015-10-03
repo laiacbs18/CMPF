@@ -1,6 +1,6 @@
 ﻿var app = angular.module('CMPF');
 
-app.controller('AdminLoginCtrl', ['$http', 'userService', '$location', 'isLoggedIn', function ($http, userService, $location, isLoggedIn) {
+app.controller('AdminLoginCtrl', ['$http', '$location', 'isLoggedIn', function ($http, $location, isLoggedIn) {
     if (isLoggedIn) {
         $location.path('/admin-dashboard');
     } else {
@@ -12,7 +12,6 @@ app.controller('AdminLoginCtrl', ['$http', 'userService', '$location', 'isLogged
         controller.submit = function () {
             $http.post('/api/admin', controller.user).
               then(function (response) {
-                  userService.setCurrentUser(response.data);
                   $location.path('/admin-dashboard');
               }, function (response) {
                   alert("invalid credentials");
