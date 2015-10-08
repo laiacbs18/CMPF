@@ -65,6 +65,17 @@
                         ]
                     }
                 }).
+                when('/admin/marco-filosofico', {
+                    templateUrl: 'partials/admin_marco_filosofico.html',
+                    controller: 'AdminMarcoFilosoficoCtrl',
+                    controllerAs: 'adminMarcoFilosofico',
+                    resolve: {
+                        user: ['userService', function (userService) {
+                            return userService.getCurrentUser();
+                        }
+                        ]
+                    }
+                }).
                 when('/admin-login', {
                     templateUrl: 'partials/admin_login.html',
                     controller: 'AdminLoginCtrl',
@@ -141,6 +152,34 @@
         }
     ]);
 
+    app.config(function($provide){
+        $provide.decorator('taOptions', ['taRegisterTool', '$delegate', 'fileUploader', function(taRegisterTool, taOptions, fileUploader){
+            // $delegate is the taOptions we are decorating
+            // register the tool with textAngular
+            taRegisterTool('fileUpload', {
+                iconclass: "fa fa-file-image-o",
+                action: function($deferred, restoreSelection){
+                    var action = this;
+                    fileUploader.onFileSelected = function(){
+                        restoreSelection()
+                        var imageLink = fileUploader.file;
+
+                        if(imageLink && imageLink !== '' && imageLink !== 'http://'){
+                            return action.$editor().wrapSelection('insertImage', imageLink, true);
+                        }
+                        $deferred.resolve();
+                    };
+
+                    fileUploader.showDialog();
+                    return false;
+                }
+            });
+            // add the button to the default toolbar definition
+            taOptions.toolbar[1].push('fileUpload');
+            return taOptions;
+        }]);
+    });
+
     app.run([
         '$rootScope', '$location', function($rootScope, $location) {
             $rootScope.$on("$routeChangeError", function (ev, route, other, error) {
@@ -152,6 +191,74 @@
             });
         }
     ]);
+
+    app.service('fileUploader', function(){
+        var service = this;
+        service.file = undefined;
+        service.displayed = false;
+
+        service.onFileSelected = function(){};
+
+        service.showDialog = function(){
+            service.displayed = true;
+        };
+
+        service.hideDialog = function(){
+            service.displayed = false;
+        };
+    });
+
+    app.directive('fileUploadSelect', ['fileUploader', function(fileUploader){
+       return {
+           restrict: 'A',
+           link: function(scope, element, attrs){
+               element.bind("change", function (changeEvent) {
+                   if (this.files.length > 0) {
+                       Parse.initialize("vyanNXGUInB1EYAoqf4q6LCp4Je4aK10eJZrKLqF", "OBCQQChmRHMCRzLusrPxtDxCWuzvKparawRtvoIx");
+                       var file = this.files[0];
+                       var parseFile = new Parse.File(file.name, file);
+                       parseFile.save().then(function() {
+                           var contentImage = new Parse.Object("ContentImages");
+                           contentImage.set("image", parseFile);
+                           contentImage.save().then(function(){
+                               scope.$apply(function(){
+                                   fileUploader.file = parseFile.url();
+                                   fileUploader.hideDialog();
+                                   fileUploader.onFileSelected();
+                               });
+                           },function(error){
+                           });
+                       }, function(error) {
+                       });
+                   }
+               });
+           }
+       }
+    }]);
+    app.directive('fileUploaderDialog', ['fileUploader', function(fileUploader) {
+        return {
+            restrict: 'A',
+            templateUrl: 'partials/fileUploadDialog.html',
+            link: function(scope, element, attrs){
+
+                scope.$watch(function(){
+                    return fileUploader.displayed;
+                }, function(){
+                    if(fileUploader.displayed) {
+                        $('.file-upload-dialog').modal({
+                            backdrop: 'static'
+                        });
+                        $('.file-upload-dialog').on('hide.bs.modal', function (e) {
+                            fileUploader.hideDialog();
+                        })
+                    }else{
+                        $('.file-upload-dialog').modal('hide');
+                    }
+                })
+
+            }
+        };
+    }]);
 
     app.directive('metisMenu', function() {
         return {
@@ -240,114 +347,30 @@
 
     
 
-    app.controller('ContextCtrl', function() {
-
-    });
+    app.controller('ContextCtrl', ['$http', function ($http) {
+        var controller = this;
+        $http.get('/api/content?area=marcoFilosofico').then(function(response) {
+            controller.content = response.data;
+        }, function(error) {});
+    }]);
 
 
     app.controller('DescriptionCtrl', function() {
 
     });
 
-    app.controller('AdminQuienesSomosCtrl', function () {
+    app.controller('AdminQuienesSomosCtrl', ['$http', function ($http) {
 
-    });
-
-
-
-    app.controller('AdminAreasCtrl', ['$http', 'FileUploader', function ($http, FileUploader) {
         var controller = this;
-        controller.areas = [];
-        controller.selectedAreas = [];
 
-        controller.uploader = new FileUploader({
-            url: '/api/areasadmin'
-        });
+        $http.get('/api/admin/content?area=aboutUs').then(function(response) {
+            controller.content = response.data;
+        }, function(error) {});
 
-        // FILTERS
-
-        controller.uploader.filters.push({
-            name: 'imageFilter',
-            fn: function (item /*{File|FileLikeObject}*/, options) {
-                var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
-                return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
-            }
-        });
-
-        controller.uploader.onSuccessItem = function (fileItem, response, status, headers) {
-            controller.areas.push(response);
+        controller.save = function(){
+          $http.put('/api/admin/content', controller.content);
         };
 
-        this.images = [];
-
-        for (var i = 0; i <= 54; i++) {
-            this.images.push("img/fotos_tour_virtual/" + i + ".jpg");
-        }
-
-
-        $http.get('/api/areasadmin').then(function (response) {
-            controller.areas = response.data;
-        }, function (error) { });
-
-        controller.create = function () {
-            controller.uploader.clearQueue();
-            $('.areas-modal').modal({
-                backdrop: 'static'
-            });
-        };
-
-        var deleteArea = function (area, withSelected) {
-            $http.delete('/api/areasadmin/' + area.id).then(function (response) {
-                var index = controller.areas.indexOf(area);
-                controller.areas.splice(index, 1);
-                if (withSelected) {
-                    controller.toggle(area);
-                }
-
-            }, function(error) {
-                console.log(error);
-            });
-        }
-
-        controller.delete = function (area) {
-            var response = confirm('Seguro que desea borrar?');
-            if (response) {
-                deleteArea(area);
-            }
-        };
-
-        
-        controller.deleteAll = function () {
-            var textQuestion = 'Seguro que desea borrar todas las imagenes?';
-            var arrayAreas = controller.areas;
-            var selected = false;
-            if (controller.selectedAreas.length > 0) {
-                textQuestion = 'Seguro que desea borrar ' + controller.selectedAreas.length + ' imagenes?';
-                arrayAreas = controller.selectedAreas;
-                selected = true;
-            }
-
-            var responseSelected = confirm(textQuestion);
-            if (responseSelected) {
-                for (var indexSelected = 0; indexSelected < arrayAreas.length; indexSelected++) {
-                    var selectedArea = arrayAreas[indexSelected];
-                    deleteArea(selectedArea, selected);
-                }
-            }
-        };
-
-        controller.isSelected = function(area) {
-            return controller.selectedAreas.indexOf(area) >= 0;
-        }
-
-        controller.toggle = function (area) {
-            var index = controller.selectedAreas.indexOf(area);
-            if (index >= 0) {
-                controller.selectedAreas.splice(index, 1);
-            } else {
-                controller.selectedAreas.push(area);
-            }
-        }
     }]);
 
     //from here up
