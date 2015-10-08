@@ -21,10 +21,10 @@
                         ]
                     }
                 }).
-                when('/admin/quienes-somos', {
-                    templateUrl: 'partials/admin_quienes_somos.html',
-                    controller: 'AdminQuienesSomosCtrl',
-                    controllerAs: 'adminQuienesSomos',
+                when('/admin/content/:section', {
+                    templateUrl: 'partials/admin_content.html',
+                    controller: 'AdminContentCtrl',
+                    controllerAs: 'content',
                     resolve: {
                         user: ['userService', function (userService) {
                             return userService.getCurrentUser();
@@ -58,17 +58,6 @@
                     templateUrl: 'partials/admin_areas.html',
                     controller: 'AdminAreasCtrl',
                     controllerAs: 'adminAreas',
-                    resolve: {
-                        user: ['userService', function (userService) {
-                            return userService.getCurrentUser();
-                        }
-                        ]
-                    }
-                }).
-                when('/admin/marco-filosofico', {
-                    templateUrl: 'partials/admin_marco_filosofico.html',
-                    controller: 'AdminMarcoFilosoficoCtrl',
-                    controllerAs: 'adminMarcoFilosofico',
                     resolve: {
                         user: ['userService', function (userService) {
                             return userService.getCurrentUser();
@@ -122,9 +111,14 @@
                     controllerAs: 'service'
                 }).
                 when('/descripcion', {
-                    templateUrl: 'partials/description.html',
-                    controller: 'DescriptionCtrl',
-                    controllerAs: 'description'
+                    templateUrl: 'partials/content.html',
+                    controller: 'ContentCtrl',
+                    controllerAs: 'content',
+                    resolve: {
+                        selector: function(){
+                            return 'descripcion';
+                        }
+                    }
                 }).
                 when('/equipoGerencial', {
                     templateUrl: 'partials/managementTeam.html',
@@ -132,14 +126,24 @@
                     controllerAs: 'management'
                 }).
                 when('/marcoFilosofico', {
-                    templateUrl: 'partials/context.html',
-                    controller: 'ContextCtrl',
-                    controllerAs: 'philosophicalFramework'
+                    templateUrl: 'partials/content.html',
+                    controller: 'ContentCtrl',
+                    controllerAs: 'content',
+                    resolve: {
+                        selector: function(){
+                            return 'marcoFilosofico';
+                        }
+                    }
                 }).
                 when('/acercaDeNosotros', {
-                    templateUrl: 'partials/about_us.html',
-                    controller: 'AboutCtrl',
-                    controllerAs: 'aboutUs'
+                    templateUrl: 'partials/content.html',
+                    controller: 'ContentCtrl',
+                    controllerAs: 'content',
+                    resolve: {
+                        selector: function(){
+                            return 'aboutUs';
+                        }
+                    }
                 }).
                 when('/', {
                     templateUrl: 'partials/home.html',
@@ -344,34 +348,6 @@
     app.controller('HomeCtrl', function() {
 
     });
-
-    
-
-    app.controller('ContextCtrl', ['$http', function ($http) {
-        var controller = this;
-        $http.get('/api/content?area=marcoFilosofico').then(function(response) {
-            controller.content = response.data;
-        }, function(error) {});
-    }]);
-
-
-    app.controller('DescriptionCtrl', function() {
-
-    });
-
-    app.controller('AdminQuienesSomosCtrl', ['$http', function ($http) {
-
-        var controller = this;
-
-        $http.get('/api/admin/content?area=aboutUs').then(function(response) {
-            controller.content = response.data;
-        }, function(error) {});
-
-        controller.save = function(){
-          $http.put('/api/admin/content', controller.content);
-        };
-
-    }]);
 
     //from here up
     

@@ -148,6 +148,9 @@ app.get('/api/admin/content', function (req, res) {
             case 'marcoFilosofico':
                 id = 'BQCSQ9qQPm';
                 break;
+            case 'descripcion':
+                id = 'dcbOkbf7tg';
+                break;
             default:
                 id = '';
         }
@@ -202,6 +205,9 @@ app.get('/api/content', function (req, res) {
                 break;
             case 'marcoFilosofico':
                 id = 'BQCSQ9qQPm';
+                break;
+            case 'descripcion':
+                id = 'dcbOkbf7tg';
                 break;
             default:
                 id = '';
