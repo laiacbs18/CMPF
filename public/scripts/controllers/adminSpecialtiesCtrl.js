@@ -30,7 +30,7 @@ app.controller('AdminSpecialtiesCtrl', [
         controller.create = function() {
             controller.reference = null;
 
-            controller.selectedService = {
+            controller.selectedSpecialty = {
                 area: '',
                 contactNum: '',
                 name: '',

@@ -7,8 +7,10 @@ var Mailgun = require('mailgun');
 var parseExpressHttpsRedirect = require('parse-express-https-redirect');
 var parseExpressCookieSession = require('parse-express-cookie-session');
 var adminServices = require('cloud/routes/admin/services.js');
-var adminSpecialties = require('cloud/routes/admin/specialties.js')
-var adminAreas = require('cloud/routes/admin/areas.js')
+var adminSpecialties = require('cloud/routes/admin/specialties.js');
+var adminAreas = require('cloud/routes/admin/areas.js');
+var adminStaff = require('cloud/routes/admin/staff.js');
+var adminContent = require('cloud/routes/admin/content.js');
 
 Mailgun.initialize(config.mailgun.domain, config.mailgun.api);
 
@@ -25,7 +27,16 @@ app.get('/api/admin', function (req, res){
     var currentUser = Parse.User.current();
     if (currentUser) {
         currentUser.fetch().then(function(user){
-            res.send(200, user);
+
+            var values = {
+                username: user.get('username'),
+                id: user.id
+            };
+            values.parseKeys = {
+                appId: config.parseJsKeys.appId,
+                jsKey: config.parseJsKeys.jsKey
+            };
+            res.send(200, values);
         }).fail(function(){
             res.send(401,{});
         });
@@ -47,19 +58,35 @@ app.get('/api/admin/logout', function (req, res){
     res.send(200, {});
 });
 
-app.get('/api/admin/services', adminServices.get);
-app.delete('/api/admin/services/:service_id', adminServices.delete);
-app.put('/api/admin/services', adminServices.put);
-app.post('/api/admin/services', adminServices.post);
+function isAuthenticated(req, res, next) {
+    var currentUser = Parse.User.current();
+    if (currentUser) {
+        return next();
+    }
+    res.send(401,{});
+}
+
+app.get('/api/admin/services', isAuthenticated, adminServices.get);
+app.delete('/api/admin/services/:service_id', isAuthenticated, adminServices.delete);
+app.put('/api/admin/services', isAuthenticated, adminServices.put);
+app.post('/api/admin/services', isAuthenticated, adminServices.post);
 
 
-app.get('/api/admin/specialties', adminSpecialties.get);
-app.delete('/api/admin/specialties/:specialty_id', adminSpecialties.delete);
-app.put('/api/admin/specialties', adminSpecialties.put);
-app.post('/api/admin/specialties', adminSpecialties.post);
+app.get('/api/admin/specialties', isAuthenticated, adminSpecialties.get);
+app.delete('/api/admin/specialties/:specialty_id', isAuthenticated, adminSpecialties.delete);
+app.put('/api/admin/specialties', isAuthenticated, adminSpecialties.put);
+app.post('/api/admin/specialties', isAuthenticated, adminSpecialties.post);
 
-app.get('/api/admin/areas', adminAreas.get);
-app.delete('/api/admin/areas/:area_id', adminAreas.delete);
+app.get('/api/admin/areas', isAuthenticated, adminAreas.get);
+app.delete('/api/admin/areas/:area_id', isAuthenticated, adminAreas.delete);
+
+app.get('/api/admin/staff', isAuthenticated, adminStaff.get);
+app.delete('/api/admin/staff/:staff_id', isAuthenticated, adminStaff.delete);
+app.put('/api/admin/staff', isAuthenticated, adminStaff.put);
+app.post('/api/admin/staff', isAuthenticated, adminStaff.post);
+
+app.get('/api/admin/content',isAuthenticated, adminContent.get);
+app.put('/api/admin/content',isAuthenticated, adminContent.put);
 
 app.get('/api/services', function (req, res) {
 
@@ -136,63 +163,7 @@ app.get('/api/areas', function (req, res) {
     });
 });
 
-app.get('/api/admin/content', function (req, res) {
-    if(_.isUndefined(req.query.area) || req.query.area === ''){
-        res.send(400, 'error');
-    }else{
-        var id;
-        switch (req.query.area) {
-            case 'aboutUs':
-                id = '3Z1EowfgjM';
-                break;
-            case 'marcoFilosofico':
-                id = 'BQCSQ9qQPm';
-                break;
-            case 'descripcion':
-                id = 'dcbOkbf7tg';
-                break;
-            default:
-                id = '';
-        }
-        var Content = Parse.Object.extend("Content");
-        var query = new Parse.Query(Content);
-        query.get(id, {
-            success: function (result) {
-                var values = {
-                    id: result.id,
-                    htmlBody: result.get('htmlBody')
-                };
-                res.send(200, values);
-            },
-            error: function (error) {
-                res.send(500, 'error');
-            }
-        });
-    }
-});
 
-app.put('/api/admin/content', function (req, res) {
-    var Content = Parse.Object.extend('Content');
-    var query = new Parse.Query(Content);
-    query.get(req.body.id, {
-        success: function (result){
-            result.set('htmlBody', req.body.htmlBody);
-            result.save(null, {
-                success: function(){
-                    res.send(200, true);
-                },
-                error: function(error){
-                    res.send(500, 'error');
-                }
-            })
-        },
-        error: function (error){
-            res.send(500, 'error');
-        }
-    })
-
-
-});
 
 app.get('/api/content', function (req, res) {
     if(_.isUndefined(req.query.area) || req.query.area === ''){
@@ -286,17 +257,4 @@ app.get('/*', function (req, res) {
     res.redirect('/');
 });
 
-// // Example reading from the request query string of an HTTP get request.
-// app.get('/test', function(req, res) {
-//   // GET http://example.parseapp.com/test?message=hello
-//   res.send(req.query.message);
-// });
-
-// // Example reading from the request body of an HTTP post request.
-// app.post('/test', function(req, res) {
-//   // POST http://example.parseapp.com/test (with request body "message=hello")
-//   res.send(req.body.message);
-// });
-
-// Attach the Express app to Cloud Code.
 app.listen();

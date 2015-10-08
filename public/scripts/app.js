@@ -65,6 +65,17 @@
                         ]
                     }
                 }).
+                when('/admin/equipo-gerencial', {
+                    templateUrl: 'partials/admin_equipo_gerencial.html',
+                    controller: 'AdminEquipoGerencialCtrl',
+                    controllerAs: 'adminEquipoGerencial',
+                    resolve: {
+                        user: ['userService', function (userService) {
+                            return userService.getCurrentUser();
+                        }
+                        ]
+                    }
+                }).
                 when('/admin-login', {
                     templateUrl: 'partials/admin_login.html',
                     controller: 'AdminLoginCtrl',
@@ -218,7 +229,6 @@
            link: function(scope, element, attrs){
                element.bind("change", function (changeEvent) {
                    if (this.files.length > 0) {
-                       Parse.initialize("vyanNXGUInB1EYAoqf4q6LCp4Je4aK10eJZrKLqF", "OBCQQChmRHMCRzLusrPxtDxCWuzvKparawRtvoIx");
                        var file = this.files[0];
                        var parseFile = new Parse.File(file.name, file);
                        parseFile.save().then(function() {
@@ -321,6 +331,7 @@
     app.service("userService", ['$http', function ($http) {
         this.getCurrentUser = function() {
             return $http.get('/api/admin').then(function (response) {
+                Parse.initialize(response.data.parseKeys.appId,response.data.parseKeys.jsKey);
                 return response.data;
             });
         }
