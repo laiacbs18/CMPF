@@ -8,6 +8,10 @@
         },
         cookie: {
             secret: ''
+        },
+        parseJsKeys: {
+            appId: '',
+            jsKey: ''
         }
     };
 })();
