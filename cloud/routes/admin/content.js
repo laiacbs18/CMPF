@@ -59,29 +59,8 @@
 
     };
 
-    var deleteMethod = function (req, res){
-        var Areas = Parse.Object.extend("Areas");
-        var query = new Parse.Query(Areas);
-        query.get(req.params.area_id, {
-            success: function(area) {
-                area.destroy({
-                    success: function() {
-                        res.send(200, true);
-                    },
-                    error: function() {
-                        res.send(500, 'error');
-                    }
-                });
-            },
-            error: function() {
-                res.send(500, 'error');
-            }
-        });
-    };
-
     module.exports = {
         'get': getMethod,
-        'delete': deleteMethod,
         'put': putMethod
     };
 })();

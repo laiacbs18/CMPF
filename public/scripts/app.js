@@ -64,8 +64,8 @@
                         }
                         ]
                     }
-                }).
-                when('/admin/equipo-gerencial', {
+                })
+                .when('/admin/equipo-gerencial', {
                     templateUrl: 'partials/admin_equipo_gerencial.html',
                     controller: 'AdminEquipoGerencialCtrl',
                     controllerAs: 'adminEquipoGerencial',
@@ -74,6 +74,26 @@
                             return userService.getCurrentUser();
                         }
                         ]
+                    }
+                })
+                .when('/admin/news', {
+                    templateUrl: 'partials/admin_news.html',
+                    controller: 'AdminNewsCtrl',
+                    controllerAs: 'adminNews',
+                    resolve: {
+                        user: ['userService', function (userService) {
+                            return userService.getCurrentUser();
+                        }]
+                    }
+                })
+                .when('/admin/news/:entryId', {
+                    templateUrl: 'partials/admin_news_edit.html',
+                    controller: 'AdminNewsEditCtrl',
+                    controllerAs: 'adminNews',
+                    resolve: {
+                        user: ['userService', function (userService) {
+                            return userService.getCurrentUser();
+                        }]
                     }
                 }).
                 when('/admin-login', {
@@ -104,7 +124,7 @@
                 when('/noticiasyactividades', {
                     templateUrl: 'partials/news_and_activities.html',
                     controller: 'NewsAndActivitiesCtrl',
-                    controllerAs: 'newsandactivities'
+                    controllerAs: 'news'
                 }).
                 when('/areas', {
                     templateUrl: 'partials/areas.html',
@@ -339,6 +359,7 @@
 
     
     app.controller('GlobalCtrl', ['$location', '$http', function ($location, $http) {
+        this.sidebarOpen = false;
         this.isAdmin = function () {
             return $location.path().indexOf('/admin') === 0;
         };
@@ -388,9 +409,20 @@
         });
     }]);
 
-    app.controller('NewsAndActivitiesCtrl', function () {
-
-    });
+    app.controller('NewsAndActivitiesCtrl', ['$http','$location', function ($http, $location) {
+        var controller = this;
+        controller.page = ($location.search().page || 0) * 1;
+        $http.get('/api/news?page=' + controller.page).then(function (response) {
+            controller.newsList = response.data.list;
+            controller.total = response.data.total;
+        }, function (error) { });
+        controller.next = function(){
+            $location.search('page', controller.page + 1);
+        };
+        controller.previous = function(){
+            $location.search('page', controller.page - 1);
+        };
+    }]);
 
     app.controller('SpecialtiesCtrl', ['$http', function($http) {
 

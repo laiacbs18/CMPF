@@ -11,6 +11,7 @@ var adminSpecialties = require('cloud/routes/admin/specialties.js');
 var adminAreas = require('cloud/routes/admin/areas.js');
 var adminStaff = require('cloud/routes/admin/staff.js');
 var adminContent = require('cloud/routes/admin/content.js');
+var adminNews = require('cloud/routes/admin/news.js');
 
 Mailgun.initialize(config.mailgun.domain, config.mailgun.api);
 
@@ -88,6 +89,12 @@ app.post('/api/admin/staff', isAuthenticated, adminStaff.post);
 app.get('/api/admin/content',isAuthenticated, adminContent.get);
 app.put('/api/admin/content',isAuthenticated, adminContent.put);
 
+app.get('/api/admin/news/:news_id?',isAuthenticated, adminNews.get);
+app.put('/api/admin/news',isAuthenticated, adminNews.put);
+app.delete('/api/admin/news/:news_id', isAuthenticated, adminNews.delete);
+app.post('/api/admin/news', isAuthenticated, adminNews.post);
+
+
 app.get('/api/services', function (req, res) {
 
     var Services = Parse.Object.extend("Services");
@@ -139,6 +146,44 @@ app.get('/api/specialties', function (req, res) {
             res.send(200, values);
         },
         error: function (error) {
+            res.send(500, 'error');
+        }
+    });
+});
+
+app.get('/api/news', function (req, res) {
+    var page = (req.query.page || 0) * 1;
+    var News = Parse.Object.extend("News");
+    var query = new Parse.Query(News);
+    query.count({
+        success: function(count){
+            query = new Parse.Query(News);
+            query.limit(10);
+            query.skip(page * 10);
+            query.include('author');
+            query.find({
+                success: function (results) {
+                    var values = _.chain(results)
+                        .map(function (element) {
+                            return {
+                                title: element.get("title"),
+                                body: element.get("body"),
+                                date: element.createdAt,
+                                author: {
+                                    name: element.get("author").get("name"),
+                                    email: element.get("author").get("email")
+                                },
+                                id: element.id
+                            };
+                        }).sortBy('date').reverse().value();
+                    res.send(200, {total: count, list: values});
+                },
+                error: function (error) {
+                    res.send(500, 'error');
+                }
+            });
+        },
+        error: function(){
             res.send(500, 'error');
         }
     });
