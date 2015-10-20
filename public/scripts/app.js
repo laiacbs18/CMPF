@@ -134,36 +134,51 @@
                 when('/especialidades', {
                     templateUrl: 'partials/specialties.html',
                     controller: 'SpecialtiesCtrl',
-                    controllerAs: 'specialty'
+                    controllerAs: 'specialty',
+                    resolve: {
+                        specialties: ['$http', function($http){
+                            return $http.get('/api/specialties');
+                        }]
+                    }
                 }).
                 when('/servicios', {
                     templateUrl: 'partials/services.html',
                     controller: 'ServicesCtrl',
-                    controllerAs: 'service'
+                    controllerAs: 'service',
+                    resolve: {
+                        services: ['$http', function($http){
+                            return $http.get('/api/services');
+                        }]
+                    }
                 }).
                 when('/descripcion', {
                     templateUrl: 'partials/content.html',
                     controller: 'ContentCtrl',
                     controllerAs: 'content',
                     resolve: {
-                        selector: function(){
-                            return 'descripcion';
-                        }
+                        body: ['$http', function($http){
+                            return $http.get('/api/content?area=descripcion');
+                        }]
                     }
                 }).
                 when('/equipoGerencial', {
                     templateUrl: 'partials/managementTeam.html',
                     controller: 'EquipoGrlCtrl',
-                    controllerAs: 'management'
+                    controllerAs: 'management',
+                    resolve: {
+                        team: ['$http', function ($http) {
+                            return $http.get('/api/staff');
+                        }]
+                    }
                 }).
                 when('/marcoFilosofico', {
                     templateUrl: 'partials/content.html',
                     controller: 'ContentCtrl',
                     controllerAs: 'content',
                     resolve: {
-                        selector: function(){
-                            return 'marcoFilosofico';
-                        }
+                        body: ['$http', function($http){
+                            return $http.get('/api/content?area=marcoFilosofico');
+                        }]
                     }
                 }).
                 when('/acercaDeNosotros', {
@@ -171,9 +186,9 @@
                     controller: 'ContentCtrl',
                     controllerAs: 'content',
                     resolve: {
-                        selector: function(){
-                            return 'aboutUs';
-                        }
+                        body: ['$http', function($http){
+                            return $http.get('/api/content?area=aboutUs');
+                        }]
                     }
                 }).
                 when('/', {
@@ -217,6 +232,7 @@
 
     app.run([
         '$rootScope', '$location', function($rootScope, $location) {
+            new WOW().init();
             $rootScope.$on("$routeChangeError", function (ev, route, other, error) {
                 if (error.status === 401) {
                     $location.path('/admin-login');
@@ -383,11 +399,9 @@
 
     //from here up
     
-    app.controller('SpecialtiesCtrl', ['$http', function($http) {
+    app.controller('SpecialtiesCtrl', ['specialties', function(specialties) {
         var controller = this;
-        $http.get('/api/specialties').then(function (response) {
-            controller.specialties = response.data;
-        }, function (error) { });
+        controller.specialties = specialties.data;
     }]);
 
     app.controller('AreaCtrl', ['$http', function ($http) {

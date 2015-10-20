@@ -4,13 +4,13 @@
     </div>
     <div class="row ng-cloak" ng-show="areas.selectedImage" style="margin-bottom: 15px" ng-cloak>
         <div class="col-xs-12 col-md-offset-2 col-md-8 text-center">
-            <div class="area-showcase">
+            <div class="area-showcase wow zoomIn" data-wow-duration="1s">
                 <img style="max-width: 100%; max-height: 450px;" src="{{areas.selectedImage}}" ng-cloak alt=""/>
             </div>
         </div>
     </div>
         <div class="row">
-            <div class="col-xs-6 col-md-3" ng-repeat="image in areas.images">
+            <div class="col-xs-6 col-md-3 wow fadeInUp" ng-repeat="image in areas.images">
                 <a class="thumbnail" ng-class="{active: image == areas.selectedImage}" ng-click="areas.selectImage(image)" style="min-height: 192px;background-size: cover; background-position: center center;background-clip: content-box; background-image: url({{image}})" ng-style="">
                 </a>
             </div>

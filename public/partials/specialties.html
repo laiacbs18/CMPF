@@ -3,7 +3,7 @@
         <h2>Especialidades</h2>
     </div>
     <div class="row">
-        <div ng-repeat="(specialtyType, specialtyItems) in specialty.specialties" class="col-xs-12 servicios">
+        <div ng-repeat="(specialtyType, specialtyItems) in specialty.specialties" class="col-xs-12 servicios  wow fadeInUp">
             <p><strong>{{specialtyType}}</strong></p>
             <div class="row">
                 <div ng-repeat="specialityItem in specialtyItems | orderBy:'name'" class="col-xs-12">

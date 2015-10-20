@@ -11,6 +11,7 @@
   <link href="styles/site.css" rel="stylesheet">
   <link href="styles/textAngular.css" rel="stylesheet">
   <script src="scripts/es5-shim.js"></script>
+  <link href="styles/animate.css" rel="stylesheet">
 </head>
 <body class="ng-cloak" ng-class="{'login': app.isLogin(),'admin': app.isAdmin()}" ng-controller="GlobalCtrl as app" ng-cloak>
 <div ng-include="'partials/main_navbar.html'" ng-if="!app.isAdmin()" ></div>
@@ -18,7 +19,7 @@
 <div class="body-content" ng-class="{'admin-body': app.isAdmin() && !app.isLogin(), 'container': !app.isAdmin() || app.isLogin()}">
   <div ng-view="" class="row" style="padding-top: 20px" autoscroll ="true"></div>
 </div>
-<div class=" footer-container ng-cloak" ng-hide="app.isAdmin()" ng-cloak>
+<div class=" footer-container wow fadeInUp" data-wow-delay="1s" ng-hide="app.isAdmin()">
   <div class="container">
     <footer>
       <div class="row">
@@ -98,6 +99,8 @@
 <script type="text/javascript" src="scripts/controllers/adminSpecialtiesCtrl.js"></script>
 <script type="text/javascript" src="scripts/controllers/adminEquipoGerencialCtrl.js"></script>
 <script type="text/javascript" src="scripts/controllers/adminNewsCtrl.js"></script>
+
+<script type="text/javascript" src="scripts/wow.js"></script>
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
 </body>

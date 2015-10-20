@@ -1,11 +1,8 @@
 ﻿var app = angular.module('CMPF');
 
 app.controller('EquipoGrlCtrl', [
-    '$http', function($http) {
+    'team', function(team) {
         var controller = this;
-        $http.get('/api/staff').then(function(response) {
-            controller.team = response.data;
-        }, function(error) {});
-
+        controller.team = team.data;
     }
 ]);

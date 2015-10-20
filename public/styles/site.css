@@ -168,6 +168,7 @@ footer {
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 25px;
+    min-height: 300px;
 }
 
 .ta-toolbar {
@@ -379,6 +380,9 @@ footer {
 
 @media (min-width: 768px) {
 
+    .body-content{
+        min-height: 400px;
+    }
     .admin-body {
         margin-left: 250px;
     }
