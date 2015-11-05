@@ -19,53 +19,7 @@
 <div class="body-content" ng-class="{'admin-body': app.isAdmin() && !app.isLogin(), 'container': !app.isAdmin() || app.isLogin()}">
   <div ng-view="" class="row" style="padding-top: 20px" autoscroll ="true"></div>
 </div>
-<div class=" footer-container wow fadeInUp" data-wow-delay="1s" ng-hide="app.isAdmin()">
-  <div class="container">
-    <footer>
-      <div class="row">
-        <div class="col-xs-12 col-sm-4 col-md-3">
-          <h4>Síguenos</h4>
-          <button type="button" class="btn btn-primary">Facebook</button>
-        </div>
-        <div class="col-xs-12 col-sm-4 col-md-6">
-          <div class="row">
-            <div class="col-xs-12">
-              <h4>Secciones</h4>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xs-12 col-md-4 text-center">
-              <a href="#!/servicios">Servicios</a>
-            </div>
-            <div class="col-xs-12 col-md-4 text-center">
-              <a href="#!/especialidades">Especialidades</a>
-            </div>
-            <div class="col-xs-12 col-md-4 text-center">
-              <a href="#!/areas">Áreas</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-xs-12 col-sm-4 col-md-3">
-          <h4>Comparte</h4>
-        </div>
-      </div>
-      <div class="text-center row">
-        <a onclick="document.body.scrollTop = 0" style="cursor: pointer">
-          <strong>Volver arriba</strong>
-        </a>
-      </div>
-      <div class="row" style="margin-top: 8px">
-        <p class="muted credit pull-left">&copy; @DateTime.Now.Year - Centro Médico Padre Fantino S.R.L.</p>
-        <p class="muted credit pull-right">
-          Diseñado por: <a href="https://www.facebook.com/laia.bordas18">Laia Bordas</a>
-        </p>
-      </div>
-
-
-    </footer>
-  </div>
-</div>
+<app-footer></app-footer>
 <script type="text/javascript" src="scripts/jquery-2.1.4.js"></script>
 <script src="//www.parsecdn.com/js/parse-1.6.4.min.js"></script>
 

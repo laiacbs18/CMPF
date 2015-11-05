@@ -1,0 +1,41 @@
+<div class="footer-container wow fadeInUp" data-wow-delay="1s" ng-hide="app.isAdmin()">
+    <div class="container">
+        <footer>
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-md-3">
+                    <h4>Síguenos</h4>
+                    <input type=button class="btn btn-primary" onClick="location.href='https://www.facebook.com/Centro-Medico-Padre-Fantino-SRL-290746790941929/'" value='Facebook'>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-6">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h4>Secciones</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-4 text-center">
+                            <a href="#!/servicios">Servicios</a>
+                        </div>
+                        <div class="col-xs-12 col-md-4 text-center">
+                            <a href="#!/especialidades">Especialidades</a>
+                        </div>
+                        <div class="col-xs-12 col-md-4 text-center">
+                            <a href="#!/areas">Áreas</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center row">
+                <a onclick="document.body.scrollTop = 0" style="cursor: pointer">
+                    <strong>Volver arriba</strong>
+                </a>
+            </div>
+            <div class="row" style="margin-top: 8px">
+                <p class="muted credit pull-left">&copy; {{footer.currentDate() | date:'yyyy'}} - Centro Médico Padre Fantino S.R.L.</p>
+                <p class="muted credit pull-right">
+                    Diseñado por: <a href="https://do.linkedin.com/pub/laia-bordas/79/4b4/b1b">Laia Bordas</a>
+                </p>
+            </div>
+        </footer>
+    </div>
+</div>

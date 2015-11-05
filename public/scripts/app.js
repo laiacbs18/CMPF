@@ -259,6 +259,21 @@
         };
     });
 
+    app.directive('appFooter', [function(){
+        return {
+            restrict: 'E',
+            replace: true,
+            controller: function(){
+                this.currentDate = function(){
+                    return Date.now();
+                }
+            },
+            controllerAs: 'footer',
+            templateUrl: 'partials/footer.html'
+
+        };
+    }]);
+
     app.directive('fileUploadSelect', ['fileUploader', function(fileUploader){
        return {
            restrict: 'A',
