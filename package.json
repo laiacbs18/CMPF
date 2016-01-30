@@ -1,11 +1,9 @@
 {
   "name": "CMPF",
   "version": "2.0.0",
-  "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node server.js"
   },
-  "main": "bin/www",
   "engines": {
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
