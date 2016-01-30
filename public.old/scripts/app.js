@@ -440,10 +440,12 @@
 
     app.controller('NewsAndActivitiesCtrl', ['$http','$location', function ($http, $location) {
         var controller = this;
+        controller.loading = true;
         controller.page = ($location.search().page || 0) * 1;
         $http.get('/api/news?page=' + controller.page).then(function (response) {
             controller.newsList = response.data.list;
             controller.total = response.data.total;
+            controller.loading = false;
         }, function (error) { });
         controller.next = function(){
             $location.search('page', controller.page + 1);

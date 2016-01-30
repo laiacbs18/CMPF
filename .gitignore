@@ -27,6 +27,3 @@ build/Release
 node_modules
 
 .idea
-.parse.local
-.parse.project
-cloud/config.js

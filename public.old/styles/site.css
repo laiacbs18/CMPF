@@ -2,6 +2,18 @@
   display: none !important;
 }
 
+img {
+    max-width: 100%;
+}
+
+html {
+    height: 100%;
+}
+
+body{
+    height: 100%;
+}
+
 body.login{
     background: #eee;
 }
@@ -29,6 +41,11 @@ body.login{
 .margin-right {
     margin-right: 10px;
 }
+
+.jumbotron{
+    background: #ebebeb;
+}
+
 #mainPage.jumbotron.ng-scope p {
     padding-top: 10px;
     font-style: italic;
@@ -382,6 +399,7 @@ footer {
 
     .body-content{
         min-height: 400px;
+        min-height: calc(100% - 200px);
     }
     .admin-body {
         margin-left: 250px;
@@ -405,4 +423,11 @@ footer {
         margin-left: auto;
     }
 
+}
+
+@media (min-width: 992px) {
+    .body-content{
+        min-height: 400px;
+        min-height: calc(100% - 172px);
+    }
 }

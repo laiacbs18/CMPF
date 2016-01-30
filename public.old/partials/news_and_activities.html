@@ -5,6 +5,7 @@
     </div>
     <div class="row">
         <div class="col-xs-12 blog-main">
+            <h3 ng-if="!news.loading && news.newsList.length <= 0" ng-cloak class="ng-cloak">No se ha encontrado ninguna noticia</h3>
             <div class="blog-post wow fadeInUp" ng-repeat="entry in news.newsList">
                 <h2 class="blog-post-title">{{entry.title}}</h2>
                 <p class="blog-post-meta">{{entry.date | date: 'MMMM d, yyyy'}} by <a href="#">{{entry.author.name}}</a>
