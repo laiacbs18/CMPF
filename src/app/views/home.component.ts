@@ -18,7 +18,7 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
             <div class="col-xs-12 col-lg-10 col-lg-offset-1">
                 <div class="jumbotron wow fadeInUp" id="mainPage">
                     <h1>Centro Médico Padre Fantino</h1>
-                    //<img alt="portada" src="/img/cmp_edificio.jpg" />
+                    <img alt="portada" src="/img/cmp_edificio.jpg" />
                     <p>Unidos a ti desde antes de nacer</p>
                     <p>
                         <a [routerLink]="['AboutUs']" class="btn btn-primary btn-lg">Acerca de nosotros &raquo;</a>
