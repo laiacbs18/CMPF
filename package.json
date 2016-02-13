@@ -2,8 +2,8 @@
   "name": "CMPF",
   "version": "2.0.0",
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "gulp default"
+    "start": "node server.js"
+  //,"postinstall": "gulp default"
   },
   "engines": {
     "node": ">= 0.12.7"
