@@ -6,7 +6,10 @@ app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
 
 app.get('/*', function (request, response) {
-    response.render('index.html');
+    var options = {
+        root: __dirname + '/public/'
+    };
+    response.sendFile('index.html', options);
 });
 
 app.listen(app.get('port'), function () {
